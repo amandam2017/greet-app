@@ -1,21 +1,31 @@
 {
   "name": "greet-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "greet.js",
+  "description": "[![Build Status](https://travis-ci.com/amandam2017/greet-app.svg?branch=master)](https://travis-ci.com/amandam2017/greet-app)",
+  "main": "greetMe.js",
   "directories": {
     "test": "test"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.2",
+    "moment": "^2.29.1"
+  },
+  "devDependencies": {
+    "mocha": "^9.0.3"
   },
   "scripts": {
     "test": "mocha"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amandam2017/greet-app.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "mocha": "^9.0.3",
-    "body-parser": "^1.19.0",
-    "express": "^4.17.1",
-    "express-handlebars": "^5.3.2"
-  }
+  "bugs": {
+    "url": "https://github.com/amandam2017/greet-app/issues"
+  },
+  "homepage": "https://github.com/amandam2017/greet-app#readme"
 }
