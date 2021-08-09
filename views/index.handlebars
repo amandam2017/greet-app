@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div class="container">
+        <div class="row">
+            <div class="eight columns box">
+                <div class="form">
+                    <h2>GREETINGS</h2>
+                    <div class="form_container">
+                        <form id="myform" action="/enterYourName" method="POST">
+                            <div class="display--errors">
+                                <p class="requiredFieldError"></p>
+                                <h5 class="emptyRadioError"></h5>
+                                <p class="noLetters"></p>
+                            </div>
+                            
+                            <div class="row">
+                                <h4>name</h4>
+                                <input type="text" name="userName" required placeholder="name" class="enteredName" id="inputReset" value="">
+                                <span>Counter:</span>
+                            <label class="outputCounter">{{counter}}</label>
+                                <!-- <input type="text" name="greetInput" required placeholder="name" class="enteredName" id="inputReset" value="" onkeypress= "return (event.charCode > 64 && 
+                                event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"> -->
+                            <div class="languages clearfix">
+                                <h4>Select Language</h4>
+                                <div class="row eachLanguage isiXhosa">
+                                    <label>isiXhosa</label>
+                                    <input type="radio" class="selectLang" required name="userLanguage" value="isiXhosa">
+                                </div>
+                                <div class="row eachLanguage english">
+                                    <label>English</label>
+                                    <input type="radio" class="selectLang" required name="userLanguage" value="English">
+                                </div>
+                                <div class="row eachLanguage afrikaans">
+                                    <label>Afrikaans</label>
+                                    <input type="radio" class="selectLang" required name="userLanguage" value="Afrikaans">
+                                </div>
+                            </div>
+                            
+                            </div>
+                            <button class="button greetButton" type="submit" name="greet">Greet Me</button>
+                            <button class="button clear" type="button" name="cleanStorage">RESET</button>
+                            <button class="button view" type="button" name="viewLocalStorage" onclick="viewStorage()">VIEW STORAGE</button>
+                            <label id="showStorage"></label>
+
+                            <div>
+                        <span class="greetAperson">{{salutedName}}</span>
+                        </div>
+                            
+                            </div>
+                            
+
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+
+  </body>
+</html>

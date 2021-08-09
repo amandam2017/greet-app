@@ -5,7 +5,9 @@ module.exports = function greet(localData){
     function setName(enterYourName){
         enterYourName = enterYourName.charAt(0).toUpperCase() + enterYourName.slice(1).toLowerCase();
         
-        if(!theName.includes(enterYourName) && enterYourName.match(pattern)){
+        if(!theName.includes(enterYourName)
+         && enterYourName.match(pattern)
+         ){
             
             theName.push(enterYourName);
         }
@@ -26,19 +28,19 @@ module.exports = function greet(localData){
      
     // greet a person
     function greetEnteredName(name,language){
-        var greetMe = [];
+        var greetMe = ''
         if(pattern.test(name)){
 
             if(language  === 'isiXhosa' && name != ''){
-                greetMe += "Molo, " + name;
+                greetMe = "Molo, " + name;
             }
     
             if(language === 'English' && name != ''){
-                greetMe += "Hello, " + name;
+                greetMe = "Hello, " + name;
             }
     
             else if(language === 'Afrikaans' && name != ''){
-                greetMe += "Hallo, " + name;
+                greetMe = "Hallo, " + name;
             }
 
             return greetMe
