@@ -1,19 +1,5 @@
 module.exports = function greet(localData){
-
     var theName = localData || [];
-    
-    function setName(enterYourName){
-        enterYourName = enterYourName.charAt(0).toUpperCase() + enterYourName.slice(1).toLowerCase();
-        
-        if(!theName.includes(enterYourName)
-         && enterYourName.match(pattern)
-         ){
-            
-            theName.push(enterYourName);
-        }
-
-        return;
-    }
 
     function getName(){
         return theName;
@@ -24,12 +10,22 @@ module.exports = function greet(localData){
     }
 
     var pattern = /^[A-Za-z]+$/;
+    var pattern1 = /[0-9]/
     var noLetterError = 'letters only'
-     
+    var name = ''
+    var language = ''
     // greet a person
-    function greetEnteredName(name,language){
+    function greetEnteredName(enterYourName){
+
+        name = enterYourName.name
+        language = enterYourName.language
+        
+        name = name.charAt(0).toUpperCase() + name.slice(1).toLocaleLowerCase()
         var greetMe = ''
         if(pattern.test(name)){
+            if(!theName.includes(name)){
+                theName.push(name);
+            }
 
             if(language  === 'isiXhosa' && name != ''){
                 greetMe = "Molo, " + name;
@@ -44,22 +40,18 @@ module.exports = function greet(localData){
             }
 
             return greetMe
-
         }
         
         else{
             return noLetterError
         }
             
-
     }
 
     function withRadionCheckedValidation(name, language){
-        // console.log(name)
-            
-            var requiredXhosaError = "**Faka igama lakho**"
-            var requiredEnglishError = "**Please enter in your name**"
-            var requiredAfrikaansError = "**Tik asseblief jou naam in**"
+            var requiredXhosaError = "*Faka igama lakho*"
+            var requiredEnglishError = "*Please enter in your name*"
+            var requiredAfrikaansError = "*Tik asseblief jou naam in*"
 
             if (language === 'isiXhosa' && name === '') {
                 return requiredXhosaError
@@ -75,15 +67,12 @@ module.exports = function greet(localData){
             else{
                 return ''
             }
-
     }
 
     function validateEmptyForm(name, language){
-        // console.log(name)
-            
             var noName = "*please enter your name*"
-            var noLanguage = "*Please select a language*"
-            var noSelection = "*please enter your name and select a language*"
+            var noLanguage = "Please select a language"
+            var noSelection = "please enter your name and select a language"
 
             if (name === '' || name === undefined && language === '') {
                 return noSelection
@@ -103,11 +92,10 @@ module.exports = function greet(localData){
     }
 
     function validateNoLangAndName(name, language){
-        // console.log(name)
-            
-            // var noName = "*please enter your name*"
-            // var noLanguage = "*Please select a language*"
-            var noSelection = "*please enter your name and select a language*"
+            // console.log(name)    
+            // var noName = "please enter your name"
+            // var noLanguage = "Please select a language"
+            var noSelection = "please enter your name and select a language"
 
             if (name === '' || name === undefined && language === '') {
                 return noSelection
@@ -128,7 +116,6 @@ module.exports = function greet(localData){
 
 
     return{
-        setName,
         getName,
         greetCounter,
         greetEnteredName,

@@ -23,31 +23,36 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 //default route
-// app.get("/", function(req, res){
-//   res.render("index");
-// });
-
 app.get("/", function(req, res){
   res.render("index", {
-    salutedName,
+    salutedthisname : salutedName,
     counter
-    // enterYourName:greetPeeps.getName(),
-    // greetUser:greetPeeps.getName()
   });
 });
 
 //name route
 app.post('/enterYourName', function(req, res){
   // console.log(req.body);
-  greetPeeps.greetEnteredName({
-    name: req.body.userName,
-    language: req.body.userLanguage
-  })
- 
-  // console.log(greetPeeps.greetEnteredName());
+  salutedName = greetPeeps.greetEnteredName({
+    name: req.body.userName, 
+    language:req.body.userLanguage,
+}) 
+counter = greetPeeps.greetCounter()
+
+  console.log(salutedName);
+  console.log(greetPeeps.greetCounter());
 
   res.redirect('/');
 });
+
+
+// app.post('/', function(req, res){
+//   counter = greetPeeps.greetCounter({
+//     greetedNamesCount: req.body.countGreeteNames});
+//   console.log(counter);
+//   res.redirect('/');
+
+// })
 
 let PORT = process.env.PORT || 3015;
 

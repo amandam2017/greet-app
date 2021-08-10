@@ -6,8 +6,8 @@ describe("This instance is testing greet function", function(){
 
         const greetMe = greet();
 
-        greetMe.setName('yolie');    
-        assert.equal('Yolie', greetMe.getName());
+        greetMe.greetEnteredName('yolie');    
+        assert.equal('Yolie', greetMe.greetEnteredName());
         
     });
     // it('should greet Amanda in isiXhosa, the selected language and increment the counter' , function(){
@@ -25,17 +25,17 @@ describe("This instance is testing greet function", function(){
         const greetMe = greet();
         let name = 'Xolie' 
 
-        greetMe.setName(name)     
-        assert.equal(1, greetMe.greetCounter());
+        greetMe.greetEnteredName(name)     
+        assert.equal(1, greetMe.greetEnteredName());
         
     });
 
     it('should show that counter does not increment if a person is greeted more than one time' , function(){
 
         const greetMe = greet()
-        greetMe.setName('lol')
-        greetMe.setName('LOL')
-        greetMe.setName('Lol')
+        greetMe.greetEnteredName('lol')
+        greetMe.greetEnteredName('LOL')
+        greetMe.greetEnteredName('Lol')
 
         assert.equal(1, greetMe.greetCounter())
    
@@ -56,21 +56,21 @@ describe("This instance is testing greet function", function(){
     it('should increment the counter if three different names are greeted and should continue with the local storage counter on page reload. Before the page loads 3 people were greeted and 3 more are greeted after the page/browser reload and now there are 6 greeted people' , function(){
 
         const greetMe = greet()
-        greetMe.setName('busie')
-        greetMe.setName('Nandy')
-        greetMe.setName('Nzwakie')
+        greetMe.greetEnteredName('busie')
+        greetMe.greetEnteredName('Nandy')
+        greetMe.greetEnteredName('Nzwakie')
 
         assert.equal(3, greetMe.greetCounter())
 
-        greetMe.setName('Sasa')
-        greetMe.setName('Pinky')
-        greetMe.setName('Lelo')
+        greetMe.greetEnteredName('Sasa')
+        greetMe.greetEnteredName('Pinky')
+        greetMe.greetEnteredName('Lelo')
 
         assert.equal(6, greetMe.greetCounter())
         
     });
 
-    it('should display error messages saysing "plaese enter a name and select a language if no name entered and no language selected"' , function(){
+    it('should display error messages saysing "please enter a name and select a language if no name entered and no language selected"' , function(){
 
         const greetMe = greet()
         let userName = ''
@@ -86,9 +86,9 @@ describe("This instance is testing greet function", function(){
         let pattern1 = /^((CA|CK|CL)\s([0-9]){6})$/ ;
         let pattern3 = /^((CA|CK|CL)\s\d{3}\-\d{3})$/;
         let pattern2 =  /^((CA|CK|CL)\s\d{3}\s\d{3})$/;
-        greetMe.setName('')
+        greetMe.greetEnteredName('')
 
-        assert.equal('', greetMe.getName())
+        assert.equal('', greetMe.greetEnteredName())
    
     });   
 
