@@ -1,3 +1,5 @@
+const flash = require('express-flash');
+const session = require('express-session');
 const express = require('express');
 const exphbs  = require('express-handlebars');
 const bodyParser = require('body-parser');
@@ -5,11 +7,35 @@ const greet = require('./greetMe');
 
 let salutedName = ''
 let counter = 0;
+let errors = ''
 
 //instantiate app
 const app = express();
 //create instance for greet factory
 const greetPeeps = greet();
+
+// initialise session middleware - flash-express depends on it
+app.use(session({
+  secret : 'this is my session string',
+  resave: false,
+  saveUninitialized: true
+}));
+
+// initialise the flash middleware
+app.use(flash());
+
+// // Use req.flash() in your middleware
+
+//   app.get('/', function (req, res) {
+//     req.flash('info', 'Welcome');
+//     res.render('index', {
+//       title: 'Home'
+//     })
+//   });
+//   app.get('/addFlash', function (req, res) {
+//     req.flash('info', 'Flash Message Added');
+//     res.redirect('/');
+//   });
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -26,33 +52,41 @@ app.use(bodyParser.json())
 app.get("/", function(req, res){
   res.render("index", {
     salutedthisname : salutedName,
-    counter
+    counter,
+    errors
   });
 });
 
 //name route
 app.post('/enterYourName', function(req, res){
+  var name =  req.body.userName
+  var language = req.body.userLanguage
   // console.log(req.body);
+// if(language === undefined && name === undefined){
+//   req.flesh('error', 'please enter a name and select a language')
+// } else{
+  if(name && language){
   salutedName = greetPeeps.greetEnteredName({
     name: req.body.userName, 
     language:req.body.userLanguage,
 }) 
-counter = greetPeeps.greetCounter()
+  
+counter = greetPeeps.greetCounter();
+// errors = greetPeeps.validateEmptyForm();
 
+  } else if(!name && !language){
+    req.flash('error', "*please enter name and select a language*")
+  }else if(!name){
+    req.flash('error', "*please enter name*")
+  }else if(!language){
+    req.flash('error', "*please select a language*")
+  }
   console.log(salutedName);
   console.log(greetPeeps.greetCounter());
-
+// }
   res.redirect('/');
 });
 
-
-// app.post('/', function(req, res){
-//   counter = greetPeeps.greetCounter({
-//     greetedNamesCount: req.body.countGreeteNames});
-//   console.log(counter);
-//   res.redirect('/');
-
-// })
 
 let PORT = process.env.PORT || 3015;
 

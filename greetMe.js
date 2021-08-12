@@ -5,17 +5,17 @@ module.exports = function greet(localData){
         return theName;
     }
 
-    function greetCounter(){
+    function greetCounter(name,language){
         return theName.length;   
     }
 
     var pattern = /^[A-Za-z]+$/;
     var pattern1 = /[0-9]/
-    var noLetterError = 'letters only'
+    // var noLetterError = 'letters only'
     var name = ''
     var language = ''
     // greet a person
-    function greetEnteredName(enterYourName){
+    function greetEnteredName(enterYourName){ 
 
         name = enterYourName.name
         language = enterYourName.language
@@ -42,9 +42,9 @@ module.exports = function greet(localData){
             return greetMe
         }
         
-        else{
-            return noLetterError
-        }
+        // else{
+        //     return noLetterError
+        // }
             
     }
 
@@ -71,48 +71,47 @@ module.exports = function greet(localData){
 
     function validateEmptyForm(name, language){
             var noName = "*please enter your name*"
-            var noLanguage = "Please select a language"
-            var noSelection = "please enter your name and select a language"
+            var noLanguage = "*Please select a language*"
+            var noSelection = "*please enter your name and select a language*"
 
             if (name === '' || name === undefined && language === '') {
                 return noSelection
             }
 
-            else if (language === '' && name !== '' || name !== undefined) {
+            if (language === '' && name !== '' || name !== undefined) {
                 return noLanguage
             }
 
-            else if (language !== '' && name === '' || name === undefined) {
+            else if (language && name === '' || name === undefined) {
                 return noName
             }
             else{
                 return ''
             }
-
     }
 
-    function validateNoLangAndName(name, language){
-            // console.log(name)    
-            // var noName = "please enter your name"
-            // var noLanguage = "Please select a language"
-            var noSelection = "please enter your name and select a language"
+    // function validateNoLangAndName(name, language){
+    //         // console.log(name)    
+    //         var noName = "please enter your name"
+    //         var noLanguage = "Please select a language"
+    //         var noSelection = "please enter your name and select a language"
 
-            if (name === '' || name === undefined && language === '') {
-                return noSelection
-            }
+    //         if (name === '' || name === undefined && language === '') {
+    //             return noSelection
+    //         }
 
-            // else if (language === '' && name !== '' || name !== undefined) {
-            //     return noLanguage
-            // }
+    //         else if (language === '' && name !== '' || name !== undefined) {
+    //             return noLanguage
+    //         }
 
-            // else if (language !== '' && name === '' || name === undefined) {
-            //     return noName
-            // }
-            else{
-                return ''
-            }
+    //         else if (language !== '' && name === '' || name === undefined) {
+    //             return noName
+    //         }
+    //         else{
+    //             return ''
+    //         }
 
-    }
+    // }
 
 
     return{
@@ -122,6 +121,6 @@ module.exports = function greet(localData){
         withRadionCheckedValidation,
         validateEmptyForm,
         // adding these for testing more errors
-        validateNoLangAndName
+        // validateNoLangAndName
     }
 }
