@@ -90,6 +90,7 @@ app.post('/greet', function(req, res){
 
 // info to be retrieved on database
 app.get('/greeted', function(req, res){
+  
   res.render('greetedNames')
 })
 
