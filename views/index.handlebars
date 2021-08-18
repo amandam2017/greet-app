@@ -12,8 +12,9 @@
             <div class="twelve columns box">
                 <div class="form">
                     <h2>GREETINGS</h2>
+                    
                     <div class="form_container">
-                        <form id="myform" action="/enterYourName" method="POST">
+                        <form id="myform" action="/greet" method="POST">
                             <div class="error">
                                 {{messages.error}}
                             </div>
@@ -40,20 +41,17 @@
                                     <input type="radio" class="selectLang" name="userLanguage" value="Afrikaans">
                                 </div>
                             </div>
-                            
                             </div>
                             <button class="button greetButton" type="submit" name="greet">Greet Me</button>
                             <button class="button clear" type="button" name="cleanStorage">RESET</button>
-                            <button class="button view" type="button" name="viewLocalStorage" onclick="viewStorage()">VIEW STORAGE</button>
-                            <label id="showStorage"></label>
+
+                            <a href="/greeted" class="button view" type="submit" name="viewLocalStorage">VIEW GREETED NAMES</a>
 
                             <div>
-                        <span class="greetAperson">{{salutedthisname}}</span>
-                        </div>
-                            
+                                <span class="greetAperson">{{salutedthisname}}</span>
                             </div>
                             
-
+                            </div>
                         </form>
                         
                     </div>

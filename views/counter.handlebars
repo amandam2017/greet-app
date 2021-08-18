@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+<body>
+    <div class="container">
+        <div class="row">
+            <h4>each name counter </h4>
+
+
+            {{#each list}}
+            <ul>
+                </li>
+                <li><a href="/counter/{{this.counter.rows}}">  {{this.counter.rows}} </a></li>
+
+            </ul>
+            {{/each}}
+
+            <hr>
+
+            <a href ="/back" ><button class="button-primary backBtn" type="" name="button">Back</button></a>
+
+        </div>
+    </div>
+</body>
+</html>

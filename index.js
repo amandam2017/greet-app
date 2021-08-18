@@ -58,7 +58,7 @@ app.get("/", function(req, res){
 });
 
 //name route
-app.post('/enterYourName', function(req, res){
+app.post('/greet', function(req, res){
   var name =  req.body.userName
   var language = req.body.userLanguage
   // console.log(req.body);
@@ -71,8 +71,7 @@ app.post('/enterYourName', function(req, res){
     language:req.body.userLanguage,
 }) 
   
-counter = greetPeeps.greetCounter();
-// errors = greetPeeps.validateEmptyForm();
+  counter = greetPeeps.greetCounter();
 
   } else if(!name && !language){
     req.flash('error', "*please enter name and select a language*")
@@ -86,6 +85,22 @@ counter = greetPeeps.greetCounter();
 // }
   res.redirect('/');
 });
+
+
+
+// info to be retrieved on database
+app.get('/greeted', function(req, res){
+  res.render('greetedNames')
+})
+
+
+app.get('/counter/:users', function(req, res){
+    res.render()
+})
+
+app.get('/reset', function(req, res){
+  
+})
 
 
 let PORT = process.env.PORT || 3015;

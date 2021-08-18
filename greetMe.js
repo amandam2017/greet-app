@@ -7,7 +7,7 @@ module.exports = function greet(localData){
 
     function greetCounter(name,language){
         return theName.length;   
-    }
+    } 
 
     var pattern = /^[A-Za-z]+$/;
     var pattern1 = /[0-9]/
@@ -47,7 +47,7 @@ module.exports = function greet(localData){
         // }
             
     }
-
+    
     function withRadionCheckedValidation(name, language){
             var requiredXhosaError = "*Faka igama lakho*"
             var requiredEnglishError = "*Please enter in your name*"
