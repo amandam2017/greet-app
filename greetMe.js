@@ -1,12 +1,13 @@
-module.exports = function greet(localData){
-    var theName = localData || [];
+module.exports = function greet(){
+    //create a map to store names
+    var theName = {}
 
     function getName(){
         return theName;
     }
 
     function greetCounter(name,language){
-        return theName.length;   
+        return Object.keys(theName).length
     } 
 
     var pattern = /^[A-Za-z]+$/;
@@ -21,10 +22,16 @@ module.exports = function greet(localData){
         language = enterYourName.language
         
         name = name.charAt(0).toUpperCase() + name.slice(1).toLocaleLowerCase()
-        var greetMe = ''
+        var greetMe = {}
+        console.log(greetMe)
         if(pattern.test(name)){
-            if(!theName.includes(name)){
-                theName.push(name);
+            // if(!theName.includes(name)){
+            //     theName.push(name);
+            // }
+            if(theName[name]=== undefined){
+                theName[name] = 1
+            }else{
+                theName[name]++
             }
 
             if(language  === 'isiXhosa' && name != ''){
@@ -90,37 +97,17 @@ module.exports = function greet(localData){
             }
     }
 
-    // function validateNoLangAndName(name, language){
-    //         // console.log(name)    
-    //         var noName = "please enter your name"
-    //         var noLanguage = "Please select a language"
-    //         var noSelection = "please enter your name and select a language"
-
-    //         if (name === '' || name === undefined && language === '') {
-    //             return noSelection
-    //         }
-
-    //         else if (language === '' && name !== '' || name !== undefined) {
-    //             return noLanguage
-    //         }
-
-    //         else if (language !== '' && name === '' || name === undefined) {
-    //             return noName
-    //         }
-    //         else{
-    //             return ''
-    //         }
-
-    // }
-
-
     return{
         getName,
         greetCounter,
         greetEnteredName,
         withRadionCheckedValidation,
         validateEmptyForm,
-        // adding these for testing more errors
-        // validateNoLangAndName
     }
 }
+
+// create table users(
+// 	id serial not null primary key,
+// 	greeted_names text not null,
+//     counter_names int
+// );

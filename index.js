@@ -1,3 +1,5 @@
+'use strict';
+
 const flash = require('express-flash');
 const session = require('express-session');
 const express = require('express');
@@ -5,9 +7,30 @@ const exphbs  = require('express-handlebars');
 const bodyParser = require('body-parser');
 const greet = require('./greetMe');
 
+const pg = require("pg");
+const Pool = pg.Pool;
+
+// should we use a SSL connection
+let useSSL = false;
+let local = process.env.LOCAL || false;
+if (process.env.DATABASE_URL && !local){
+    useSSL = true;
+}
+// which db connection to use
+const connectionString = process.env.DATABASE_URL || 'postgresql://greetUsers:pg123@localhost:5432/my_greet_app';
+
+const pool = new Pool({
+    connectionString,
+    ssl : useSSL
+  });
+
 let salutedName = ''
+let nameList = [];
+// let eachUserGreetedMany = ''
+// const userCounter = {};
 let counter = 0;
 let errors = ''
+
 
 //instantiate app
 const app = express();
@@ -23,19 +46,6 @@ app.use(session({
 
 // initialise the flash middleware
 app.use(flash());
-
-// // Use req.flash() in your middleware
-
-//   app.get('/', function (req, res) {
-//     req.flash('info', 'Welcome');
-//     res.render('index', {
-//       title: 'Home'
-//     })
-//   });
-//   app.get('/addFlash', function (req, res) {
-//     req.flash('info', 'Flash Message Added');
-//     res.redirect('/');
-//   });
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -53,7 +63,8 @@ app.get("/", function(req, res){
   res.render("index", {
     salutedthisname : salutedName,
     counter,
-    errors
+    errors,
+    // nameList
   });
 });
 
@@ -90,13 +101,23 @@ app.post('/greet', function(req, res){
 
 // info to be retrieved on database
 app.get('/greeted', function(req, res){
+  console.log(greetPeeps.getName())
+  res.render('greetedNames', {
+    nameList:greetPeeps.getName()
+  })
   
-  res.render('greetedNames')
 })
 
 
-app.get('/counter/:users', function(req, res){
-    res.render()
+app.get('/counter/:userName', function(req, res){
+ let namesGreeted = req.params.userName;
+ let nameList = greetPeeps.getName()
+ res.render('counter', {
+   name: namesGreeted,
+   //access values in the objects
+  counter: nameList[namesGreeted]
+ })
+ 
 })
 
 app.get('/reset', function(req, res){

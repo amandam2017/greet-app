@@ -19,12 +19,11 @@
 
         <div class="row">
             <div class="col-12">
-
-                {{#each salutedthisname}}
                 <ul>
-                    <li><a href="/counter/{{this.name}}"> {{this.name}} </a></li>
-                </ul>
+                {{#each nameList}}
+                    <li><a href="/counter/{{@key}}"> {{@key}} </a></li>
                 {{/each}}
+                </ul>
 
             </div>
         </div>
