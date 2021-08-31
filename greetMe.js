@@ -1,108 +1,85 @@
-module.exports = function greet(){
+ module.exports = function greet(pool) {
     //create a map to store names
-    var theName = {}
+    // var theName = {} 
+    async function greetEnteredName(enterYourName) {
 
-    function getName(){
-        return theName;
+        name = enterYourName.name
+        language = enterYourName.language
+
+        name = name.charAt(0).toUpperCase() + name.slice(1).toLocaleLowerCase()
+
+        var greetMe = {}
+        // console.log(greetMe)
+        if (pattern.test(name)) {
+
+            // if(theName[name]=== undefined){
+            //create a variable that will have a query selector
+            var checkName = await pool.query('SELECT greeted_names FROM greetUsers WHERE greeted_names = $1', [name]);
+            if (checkName.rowCount === 0) {
+                const INSERT_QUERY = await pool.query('INSERT INTO greetUsers (greeted_names, counter_names) values ($1, 1)', [name]);
+            }
+            // theName[name] = 1
+            // }
+            else {
+                var UPDATE_QUERY = await pool.query('UPDATE greetUsers SET counter_names = counter_names+1 WHERE greeted_names = $1', [name]);
+
+                // theName[name]++
+            }
+            // console.log(name);
+            if (language === 'isiXhosa' && name != '') {
+                greetMe = "Molo, " + name;
+            }
+
+            if (language === 'English' && name != '') {
+                greetMe = "Hello, " + name;
+            }
+
+            else if (language === 'Afrikaans' && name != '') {
+                greetMe = "Hallo, " + name;
+            }
+
+            return greetMe
+        }
+
+        // else{
+        //     return noLetterError
+        // }
+
     }
 
-    function greetCounter(name,language){
-        return Object.keys(theName).length
-    } 
+    async function getName() {
+        var storedNames = await pool.query('SELECT greeted_names FROM greetUsers')
+        return storedNames.rows;
+    }
+
+    async function greetedManyTimes(name){
+        var list = await pool.query('SELECT counter_names FROM greetUsers WHERE greeted_names = $1', [name]);
+        return list.rows[0].counter_names
+    }
+
+    async function greetCounter() {
+        //create a variable to select greeted from the database and return count.rowCount
+        var count = await pool.query('SELECT greeted_names FROM greetUsers')
+        return count.rowCount;
+    }
 
     var pattern = /^[A-Za-z]+$/;
     var pattern1 = /[0-9]/
     // var noLetterError = 'letters only'
     var name = ''
     var language = ''
-    // greet a person
-    function greetEnteredName(enterYourName){ 
-
-        name = enterYourName.name
-        language = enterYourName.language
-        
-        name = name.charAt(0).toUpperCase() + name.slice(1).toLocaleLowerCase()
-        var greetMe = {}
-        console.log(greetMe)
-        if(pattern.test(name)){
-            // if(!theName.includes(name)){
-            //     theName.push(name);
-            // }
-            if(theName[name]=== undefined){
-                theName[name] = 1
-            }else{
-                theName[name]++
-            }
-
-            if(language  === 'isiXhosa' && name != ''){
-                greetMe = "Molo, " + name;
-            }
     
-            if(language === 'English' && name != ''){
-                greetMe = "Hello, " + name;
-            }
-    
-            else if(language === 'Afrikaans' && name != ''){
-                greetMe = "Hallo, " + name;
-            }
-
-            return greetMe
-        }
-        
-        // else{
-        //     return noLetterError
-        // }
-            
-    }
-    
-    function withRadionCheckedValidation(name, language){
-            var requiredXhosaError = "*Faka igama lakho*"
-            var requiredEnglishError = "*Please enter in your name*"
-            var requiredAfrikaansError = "*Tik asseblief jou naam in*"
-
-            if (language === 'isiXhosa' && name === '') {
-                return requiredXhosaError
-            }
-
-            else if (language === 'English' && name === '') {
-                return requiredEnglishError
-            }
-
-            else if (language === 'Afrikaans' && name === '') {
-                return requiredAfrikaansError
-            }
-            else{
-                return ''
-            }
+    async function resert(){
+        var clearData = await pool.query('DELETE FROM greetUsers');
+        return clearData.row;
     }
 
-    function validateEmptyForm(name, language){
-            var noName = "*please enter your name*"
-            var noLanguage = "*Please select a language*"
-            var noSelection = "*please enter your name and select a language*"
-
-            if (name === '' || name === undefined && language === '') {
-                return noSelection
-            }
-
-            if (language === '' && name !== '' || name !== undefined) {
-                return noLanguage
-            }
-
-            else if (language && name === '' || name === undefined) {
-                return noName
-            }
-            else{
-                return ''
-            }
-    }
-
-    return{
-        getName,
-        greetCounter,
+    return {
         greetEnteredName,
-        withRadionCheckedValidation,
-        validateEmptyForm,
+        greetCounter,
+        getName,
+        greetedManyTimes,
+        resert
     }
 }
 
@@ -111,3 +88,9 @@ module.exports = function greet(){
 // 	greeted_names text not null,
 //     counter_names int
 // );
+
+//whoiam --to check the super user
+//keep password -- make sure it corresponds with the super user
+//Learnt to be flexible --- to not get too attached to the code
+//keep the counter persist
+//when writing your queries from the database you need to first insert

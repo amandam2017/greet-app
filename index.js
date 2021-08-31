@@ -16,13 +16,22 @@ let local = process.env.LOCAL || false;
 if (process.env.DATABASE_URL && !local){
     useSSL = true;
 }
+
+
 // which db connection to use
-const connectionString = process.env.DATABASE_URL || 'postgresql://greetUsers:pg123@localhost:5432/my_greet_app';
+const connectionString = process.env.DATABASE_URL || 'postgresql://codex:pg123@localhost:5432/greetings_app';
 
 const pool = new Pool({
+  //connection to the address
     connectionString,
     ssl : useSSL
   });
+
+// poolg
+// .query('SELECT * FROM greetUsers', function(){
+//   return 
+
+// })
 
 let salutedName = ''
 let nameList = [];
@@ -35,7 +44,7 @@ let errors = ''
 //instantiate app
 const app = express();
 //create instance for greet factory
-const greetPeeps = greet();
+const greetPeeps = greet(pool);
 
 // initialise session middleware - flash-express depends on it
 app.use(session({
@@ -59,30 +68,30 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 //default route
-app.get("/", function(req, res){
+app.get("/", async function(req, res){
+  counter = await greetPeeps.greetCounter();
+
   res.render("index", {
     salutedthisname : salutedName,
     counter,
     errors,
     // nameList
   });
+
 });
 
 //name route
-app.post('/greet', function(req, res){
+app.post('/greet', async function(req, res){
   var name =  req.body.userName
   var language = req.body.userLanguage
-  // console.log(req.body);
-// if(language === undefined && name === undefined){
-//   req.flesh('error', 'please enter a name and select a language')
-// } else{
+
   if(name && language){
-  salutedName = greetPeeps.greetEnteredName({
+  salutedName = await greetPeeps.greetEnteredName({
     name: req.body.userName, 
     language:req.body.userLanguage,
 }) 
   
-  counter = greetPeeps.greetCounter();
+  counter = await greetPeeps.greetCounter();
 
   } else if(!name && !language){
     req.flash('error', "*please enter name and select a language*")
@@ -91,37 +100,45 @@ app.post('/greet', function(req, res){
   }else if(!language){
     req.flash('error', "*please select a language*")
   }
-  console.log(salutedName);
-  console.log(greetPeeps.greetCounter());
+  // console.log(salutedName);
+  // console.log(greetPeeps.greetCounter());
 // }
   res.redirect('/');
 });
 
 
-
 // info to be retrieved on database
-app.get('/greeted', function(req, res){
+app.get('/greeted', async function(req, res){
   console.log(greetPeeps.getName())
   res.render('greetedNames', {
-    nameList:greetPeeps.getName()
+    nameList: await greetPeeps.getName()
   })
   
 })
 
 
-app.get('/counter/:userName', function(req, res){
- let namesGreeted = req.params.userName;
- let nameList = greetPeeps.getName()
- res.render('counter', {
-   name: namesGreeted,
-   //access values in the objects
-  counter: nameList[namesGreeted]
- })
- 
-})
-
-app.get('/reset', function(req, res){
+app.get('/counter/:greeted_names', async function(req, res){
+  let names = req.params.greeted_names;
+  let counter_names = await greetPeeps.greetedManyTimes(names)
+  res.render('counter', {
+    names,
+    counter_names
+  //   name: namesGreeted,
+  //   //access values in the objects
+  //  counter: nameList[namesGreeted]
+  })
   
+ })
+
+// app.get('/counter/:userName', async function(req, res){
+//   await greetPeeps.greetedManyTimes()
+// })
+
+app.get('/reset', async function(req, res){
+
+  await greetPeeps.resert()
+
+  res.redirect('/')
 })
 
 

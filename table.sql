@@ -1,7 +1,7 @@
 create table greetUsers(
   id serial not null primary key,
   greeted_names text not null,
-   counter_names int
+  counter_names int not null
 );
 
 -- sudo -u postgres createdb my_greet_app;
