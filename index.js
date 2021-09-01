@@ -3,7 +3,7 @@
 const flash = require('express-flash');
 const session = require('express-session');
 const express = require('express');
-const exphbs  = require('express-handlebars');
+const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const greet = require('./greetMe');
 
@@ -13,8 +13,8 @@ const Pool = pg.Pool;
 // should we use a SSL connection
 let useSSL = false;
 let local = process.env.LOCAL || false;
-if (process.env.DATABASE_URL && !local){
-    useSSL = true;
+if (process.env.DATABASE_URL && !local) {
+  useSSL = true;
 }
 
 
@@ -23,11 +23,11 @@ const connectionString = process.env.DATABASE_URL || 'postgresql://codex:pg123@l
 
 const pool = new Pool({
   //connection to the address
-    connectionString,
-    ssl : {
-      rejectUnauthorized: false
-    }
-  });
+  connectionString,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 
 // poolg
 // .query('SELECT * FROM greetUsers', function(){
@@ -50,7 +50,7 @@ const greetPeeps = greet(pool);
 
 // initialise session middleware - flash-express depends on it
 app.use(session({
-  secret : 'this is my session string',
+  secret: 'this is my session string',
   resave: false,
   saveUninitialized: true
 }));
@@ -58,7 +58,7 @@ app.use(session({
 // initialise the flash middleware
 app.use(flash());
 
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
 //middlewere to make public folder visible
@@ -70,81 +70,103 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 //default route
-app.get("/", async function(req, res){
-  counter = await greetPeeps.greetCounter();
+app.get("/", async function (req, res) {
+  try {
+    counter = await greetPeeps.greetCounter();
 
-  res.render("index", {
-    salutedthisname : salutedName,
-    counter,
-    errors,
-    // nameList
-  });
+    res.render("index", {
+      salutedthisname: salutedName,
+      counter,
+      errors,
+      // nameList
+    });
+
+  } catch (error) {
+    console.log(error);
+  }
 
 });
 
 //name route
-app.post('/greet', async function(req, res){
-  var name =  req.body.userName
-  var language = req.body.userLanguage
+app.post('/greet', async function (req, res) {
+  try {
+    var name = req.body.userName
+    var language = req.body.userLanguage
 
-  if(name && language){
-  salutedName = await greetPeeps.greetEnteredName({
-    name: req.body.userName, 
-    language:req.body.userLanguage,
-}) 
-  
-  counter = await greetPeeps.greetCounter();
+    if (name && language) {
+      salutedName = await greetPeeps.greetEnteredName({
+        name: req.body.userName,
+        language: req.body.userLanguage,
+      })
 
-  } else if(!name && !language){
-    req.flash('error', "*Please enter name and select a language*")
-  }else if(!name){
-    req.flash('error', "*Please enter name*")
-  }else if(!language){
-    req.flash('error', "*Please select a language*")
+      counter = await greetPeeps.greetCounter();
+
+    } else if (!name && !language) {
+      req.flash('error', "*Please enter name and select a language*")
+    } else if (!name) {
+      req.flash('error', "*Please enter name*")
+    } else if (!language) {
+      req.flash('error', "*Please select a language*")
+    }
+    // console.log(salutedName);
+    // console.log(greetPeeps.greetCounter());
+    // }
+    res.redirect('/');
+
+  } catch (error) {
+    console.log(error);
   }
-  // console.log(salutedName);
-  // console.log(greetPeeps.greetCounter());
-// }
-  res.redirect('/');
 });
 
 
 // info to be retrieved on database
-app.get('/greeted', async function(req, res){
-  console.log(greetPeeps.getName())
-  res.render('greetedNames', {
-    nameList: await greetPeeps.getName()
-  })
-  
+app.get('/greeted', async function (req, res) {
+  try {
+    console.log(greetPeeps.getName())
+    res.render('greetedNames', {
+      nameList: await greetPeeps.getName()
+    })
+  } catch (error) {
+    console.log(error);
+  }
 })
 
 
-app.get('/counter/:greeted_names', async function(req, res){
-  let names = req.params.greeted_names;
-  let counter_names = await greetPeeps.greetedManyTimes(names)
-  res.render('counter', {
-    names,
-    counter_names
-  })
-  
- })
- 
- 
+app.get('/counter/:greeted_names', async function (req, res) {
+  try {
+    let names = req.params.greeted_names;
+    let counter_names = await greetPeeps.greetedManyTimes(names)
+    res.render('counter', {
+      names,
+      counter_names
+    })
+
+  } catch (error) {
+    console.log(error);
+  }
+
+})
+
+
 
 // app.get('/counter/:userName', async function(req, res){
 //   await greetPeeps.greetedManyTimes()
 // })
 
-app.get('/reset', async function(req, res){
+app.get('/reset', async function (req, res) {
+  try {
 
-  await greetPeeps.resert()
+    await greetPeeps.resert()
 
-  res.redirect('/')
+    res.redirect('/')
+  } catch (error) {
+    console.log(error);
+  }
 })
 
 
 let PORT = process.env.PORT || 3015;
 
-app.listen(PORT, function(){
+app.listen(PORT, function () {
   console.log('App starting on port', PORT);
 });
