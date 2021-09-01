@@ -24,7 +24,9 @@ const connectionString = process.env.DATABASE_URL || 'postgresql://codex:pg123@l
 const pool = new Pool({
   //connection to the address
     connectionString,
-    ssl : useSSL
+    ssl : {
+      rejectUnauthorized: false
+    }
   });
 
 // poolg
@@ -94,11 +96,11 @@ app.post('/greet', async function(req, res){
   counter = await greetPeeps.greetCounter();
 
   } else if(!name && !language){
-    req.flash('error', "*please enter name and select a language*")
+    req.flash('error', "*Please enter name and select a language*")
   }else if(!name){
-    req.flash('error', "*please enter name*")
+    req.flash('error', "*Please enter name*")
   }else if(!language){
-    req.flash('error', "*please select a language*")
+    req.flash('error', "*Please select a language*")
   }
   // console.log(salutedName);
   // console.log(greetPeeps.greetCounter());
