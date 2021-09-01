@@ -1,66 +1,80 @@
+'use strict';
+ 
  module.exports = function greet(pool) {
     //create a map to store names
     // var theName = {} 
     async function greetEnteredName(enterYourName) {
-
-        name = enterYourName.name
-        language = enterYourName.language
-
-        name = name.charAt(0).toUpperCase() + name.slice(1).toLocaleLowerCase()
-
-        var greetMe = {}
-        // console.log(greetMe)
-        if (pattern.test(name)) {
-
-            // if(theName[name]=== undefined){
-            //create a variable that will have a query selector
-            var checkName = await pool.query('SELECT greeted_names FROM greetUsers WHERE greeted_names = $1', [name]);
-            if (checkName.rowCount === 0) {
-                const INSERT_QUERY = await pool.query('INSERT INTO greetUsers (greeted_names, counter_names) values ($1, 1)', [name]);
+        try {
+            name = enterYourName.name
+            language = enterYourName.language
+    
+            name = name.charAt(0).toUpperCase() + name.slice(1).toLocaleLowerCase()
+    
+            var greetMe = {}
+            // console.log(greetMe)
+            if (pattern.test(name)) {
+    
+                // if(theName[name]=== undefined){
+                //create a variable that will have a query selector
+                var checkName = await pool.query('SELECT greeted_names FROM greetUsers WHERE greeted_names = $1', [name]);
+                if (checkName.rowCount === 0) {
+                    const INSERT_QUERY = await pool.query('INSERT INTO greetUsers (greeted_names, counter_names) values ($1, 1)', [name]);
+                }
+                // theName[name] = 1
+                // }
+                else {
+                    var UPDATE_QUERY = await pool.query('UPDATE greetUsers SET counter_names = counter_names+1 WHERE greeted_names = $1', [name]);
+    
+                    // theName[name]++
+                }
+                // console.log(name);
+                if (language === 'isiXhosa' && name != '') {
+                    greetMe = "Molo, " + name;
+                }
+    
+                if (language === 'English' && name != '') {
+                    greetMe = "Hello, " + name;
+                }
+    
+                else if (language === 'Afrikaans' && name != '') {
+                    greetMe = "Hallo, " + name;
+                }
+    
+                return greetMe
             }
-            // theName[name] = 1
-            // }
-            else {
-                var UPDATE_QUERY = await pool.query('UPDATE greetUsers SET counter_names = counter_names+1 WHERE greeted_names = $1', [name]);
-
-                // theName[name]++
-            }
-            // console.log(name);
-            if (language === 'isiXhosa' && name != '') {
-                greetMe = "Molo, " + name;
-            }
-
-            if (language === 'English' && name != '') {
-                greetMe = "Hello, " + name;
-            }
-
-            else if (language === 'Afrikaans' && name != '') {
-                greetMe = "Hallo, " + name;
-            }
-
-            return greetMe
+            
+        } catch (error) {
+            console.log(error)
+            
         }
-
-        // else{
-        //     return noLetterError
-        // }
-
     }
 
     async function getName() {
-        var storedNames = await pool.query('SELECT greeted_names FROM greetUsers')
-        return storedNames.rows;
+        try {
+            var storedNames = await pool.query('SELECT greeted_names FROM greetUsers')
+            return storedNames.rows;
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     async function greetedManyTimes(name){
-        var list = await pool.query('SELECT counter_names FROM greetUsers WHERE greeted_names = $1', [name]);
-        return list.rows[0].counter_names
+        try {
+            var list = await pool.query('SELECT counter_names FROM greetUsers WHERE greeted_names = $1', [name]);
+            return list.rows[0].counter_names
+        } catch (error) {
+            console.log(error)    
+        }
     }
 
     async function greetCounter() {
         //create a variable to select greeted from the database and return count.rowCount
-        var count = await pool.query('SELECT greeted_names FROM greetUsers')
-        return count.rowCount;
+        try {
+            var count = await pool.query('SELECT greeted_names FROM greetUsers')
+            return count.rowCount;
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     var pattern = /^[A-Za-z]+$/;
@@ -70,8 +84,12 @@
     var language = ''
     
     async function resert(){
-        var clearData = await pool.query('DELETE FROM greetUsers');
-        return clearData.row;
+        try {
+            var clearData = await pool.query('DELETE FROM greetUsers');
+            return clearData.row;
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return {

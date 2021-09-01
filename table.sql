@@ -3,10 +3,3 @@ create table greetUsers(
   greeted_names text not null,
   counter_names int not null
 );
-
--- sudo -u postgres createdb my_greet_app;
--- sudo -u postgres createuser users -P;
-
--- //grant access
--- grant all privileges on database my_greet_app to users;
-

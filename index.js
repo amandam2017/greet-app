@@ -123,12 +123,11 @@ app.get('/counter/:greeted_names', async function(req, res){
   res.render('counter', {
     names,
     counter_names
-  //   name: namesGreeted,
-  //   //access values in the objects
-  //  counter: nameList[namesGreeted]
   })
   
  })
+ 
+ 
 
 // app.get('/counter/:userName', async function(req, res){
 //   await greetPeeps.greetedManyTimes()
