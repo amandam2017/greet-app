@@ -78,7 +78,7 @@
     }
 
     var pattern = /^[A-Za-z]+$/;
-    var pattern1 = /[0-9]/
+    // var pattern1 = /[0-9]/
     // var noLetterError = 'letters only'
     var name = ''
     var language = ''

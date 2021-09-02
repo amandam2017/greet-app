@@ -18,27 +18,18 @@ if (process.env.DATABASE_URL && !local) {
 }
 
 
-// which db connection to use
+// which db connection to connect to
 const connectionString = process.env.DATABASE_URL || 'postgresql://codex:pg123@localhost:5432/greetings_app';
 
 const pool = new Pool({
-  //connection to the address
   connectionString,
   ssl: {
     rejectUnauthorized: false
   }
 });
 
-// poolg
-// .query('SELECT * FROM greetUsers', function(){
-//   return 
-
-// })
-
 let salutedName = ''
 let nameList = [];
-// let eachUserGreetedMany = ''
-// const userCounter = {};
 let counter = 0;
 let errors = ''
 
@@ -86,31 +77,37 @@ app.get("/", async function (req, res) {
   }
 
 });
+var pattern = /^[A-Za-z]+$/;
 
-//name route
 app.post('/greet', async function (req, res) {
   try {
     var name = req.body.userName
     var language = req.body.userLanguage
 
-    if (name && language) {
-      salutedName = await greetPeeps.greetEnteredName({
-        name: req.body.userName,
-        language: req.body.userLanguage,
-      })
-
-      counter = await greetPeeps.greetCounter();
-
-    } else if (!name && !language) {
+    if(pattern.test(name)){
+      if (name && language) {
+        salutedName = await greetPeeps.greetEnteredName({
+          name: req.body.userName,
+          language: req.body.userLanguage,
+        })
+  
+        counter = await greetPeeps.greetCounter();
+  
+      }
+     
+    else if (!name && !language) {
       req.flash('error', "*Please enter name and select a language*")
     } else if (!name) {
       req.flash('error', "*Please enter name*")
     } else if (!language) {
       req.flash('error', "*Please select a language*")
     }
-    // console.log(salutedName);
-    // console.log(greetPeeps.greetCounter());
-    // }
+  }
+  else{
+    req.flash('error', "*letters only*")
+
+  }
+
     res.redirect('/');
 
   } catch (error) {
@@ -146,12 +143,6 @@ app.get('/counter/:greeted_names', async function (req, res) {
   }
 
 })
-
-
-
-// app.get('/counter/:userName', async function(req, res){
-//   await greetPeeps.greetedManyTimes()
-// })
 
 app.get('/reset', async function (req, res) {
   try {
