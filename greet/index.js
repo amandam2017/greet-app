@@ -80,8 +80,6 @@ app.get("/", async function (req, res) {
 var pattern = /^[A-Za-z]+$/;
 
 app.post('/greet', async function (req, res) {
-  console.log(await greetPeeps.greetEnteredName({name: req.body.userName,
-    language: req.body.userLanguage}))
   try {
     var name = req.body.userName
     var language = req.body.userLanguage
@@ -121,7 +119,7 @@ app.post('/greet', async function (req, res) {
 // info to be retrieved on database
 app.get('/greeted', async function (req, res) {
   try {
-    // console.log(await greetPeeps.getName())
+    console.log(greetPeeps.getName())
     res.render('greetedNames', {
       nameList: await greetPeeps.getName()
     })

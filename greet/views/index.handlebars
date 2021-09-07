@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div class="container">
+        <div class="row">
+            <div class="twelve columns box">
+                <div class="form">
+                    <h2>GREETINGS</h2>
+                    
+                    <div class="form_container">
+                        <form id="myform" action="/greet" method="POST">
+                            <div class="error">
+                                {{messages.error}}
+                            </div>
+                            
+                            <div class="row">
+                                <h4>Enter your name</h4>
+                                <input type="text" name="userName" placeholder="name" class="enteredName" id="inputReset" value="">
+                                <span>Counter:</span>
+                            <label class="outputCounter" name="countGreeteNames">{{counter}}</label>
+                                <!-- <input type="text" name="greetInput" required placeholder="name" class="enteredName" id="inputReset" value="" onkeypress= "return (event.charCode > 64 && 
+                                event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"> -->
+                            <div class="languages clearfix">
+                                <h4>Select Language</h4>
+                                <div class="row eachLanguage isiXhosa">
+                                    <label>isiXhosa</label>
+                                    <input type="radio" class="selectLang" name="userLanguage" value="isiXhosa">
+                                </div>
+                                <div class="row eachLanguage english">
+                                    <label>English</label>
+                                    <input type="radio" class="selectLang" name="userLanguage" value="English">
+                                </div>
+                                <div class="row eachLanguage afrikaans">
+                                    <label>Afrikaans</label>
+                                    <input type="radio" class="selectLang" name="userLanguage" value="Afrikaans">
+                                </div>
+                            </div>
+                            </div>
+                            <button class="button greetButton" type="submit" name="greet">Greet Me</button>
+                            
+                            <a href="/reset"><button class="button clear" type="button" name="deleteData">RESET</button></a>
+                            <a href="/greeted" class="button view" type="submit" name="viewLocalStorage">VIEW GREETED NAMES</a>
+
+                            <div>
+                                <span class="greetAperson">{{salutedthisname}}</span>
+                            </div>
+                            
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>    
+        </div>
+    </div>
+  </body>
+</html>

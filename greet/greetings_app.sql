@@ -3,4 +3,3 @@ create table greetUsers(
   greeted_names text not null,
   counter_names int not null
 );
-

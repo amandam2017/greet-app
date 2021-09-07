@@ -6,7 +6,7 @@ const pg = require("pg");
 const Pool = pg.Pool;
 
 // which db connection to use
-const connectionString = process.env.DATABASE_URL || 'postgresql://codex:pg123@localhost:5432/greetings_app';
+const connectionString = process.env.DATABASE_URL || 'postgresql://codex:pg123@localhost:5432/greetings_tests-db';
 
 const pool = new Pool({
     //connection to the address
@@ -24,17 +24,15 @@ describe("The greet_app", function () {
     });
 
     describe("The greetEnteredName function", function () {
-        it("should be able to insert a name Amanda and increment the counter", async function () {
-            //connect to the factory function
+        it('should be able to set and get the entered name Amelia' , async function(){
+
             let salute = greetPeeps(pool);
+    
+            await salute.greetEnteredName({name:"Maarman", language:"isiXhosa"})
+            assert.deepEqual([{greeted_names:"Maarman"}], await salute.getName());
             
-            await salute.greetEnteredName("Amanda")
-
-            // assert.equal('Amanda', await salute.getName());
-
-            assert.deepEqual([{name:"Amanda"}], await salute.getName());
-
         });
+
     });
 
     describe("The greetEnteredName function", function () {
@@ -43,30 +41,30 @@ describe("The greet_app", function () {
         it("Should be able to greet in Isixhosa", async function () {
             let salute = greetPeeps(pool);
             
-            await salute.greetEnteredName('Xhosa', 'Mandy');
+            // await salute.greetEnteredName({name:'Mandy', language:'Xhosa'});
+
+            assert.deepEqual("Molo, Mandy", await salute.greetEnteredName({name:"Mandy", language:"isiXhosa"}));
 
 
-            assert.equal('Molo, Mandy', await salute.greetEnteredName('Xhosa', 'Mandy'));
+            // assert.deepEqual('Molo, Mandy', await salute.greetEnteredName('Xhosa', 'Mandy'));
 
         });
         it("Should be able to greet in English", async function () {
             let salute = greetPeeps(pool);
 
-            await salute.greetEnteredName('English', 'Boys');
+            // await salute.greetEnteredName({name:"Boys", language:"English"});
 
-
-
-            assert.equal('Hellow, Boys', await salute.greetEnteredName('English', 'Boys'));
+            assert.deepEqual("Hello, Boys", await salute.greetEnteredName({name:"Boys", language:"English"}));
 
         });
 
         it("Should be able to greet in Afrikaans", async function () {
             let salute = greetPeeps(pool);
 
-            await salute.greetEnteredName('Hallo', 'Nandy');
+            // await salute.greetEnteredName('Hallo', 'Nandy');
 
 
-            assert.equal('Hallo, Nandy', await salute.greetEnteredName('Afrikaans', 'Nandy'));
+            assert.equal('Hallo, Nandy', await salute.greetEnteredName({name:"nandy", language:"Afrikaans"}));
 
         });
     });
@@ -75,8 +73,8 @@ describe("The greet_app", function () {
         it("Should be able to count 2 names entered", async function () {
             let salute = greetPeeps(pool);
 
-            await salute.greetEnteredName('Yolie');
-            await salute.greetEnteredName('Bulie');
+            await salute.greetEnteredName({name:"Yolie", language:"isiXhosa"});
+            await salute.greetEnteredName({name:"Bulie", language:"isiXhosa"});
 
             assert.equal(2, await salute.greetCounter());
         });
@@ -84,11 +82,10 @@ describe("The greet_app", function () {
         it("Should be able to count 4 names entered and increment the counter", async function () {
             let salute = greetPeeps(pool);
 
-            await salute.greetEnteredName('amanda');
-            await salute.greetEnteredName('lina');
-            await salute.greetEnteredName('mnashe');
-            await salute.greetEnteredName('Izie');
-
+            await salute.greetEnteredName({name:"amanda", language:"isiXhosa"});
+            await salute.greetEnteredName({name:"LInamandla", language:"isiXhosa"});
+            await salute.greetEnteredName({name:"Lusanda", language:"isiXhosa"});
+            await salute.greetEnteredName({name:"Xolie", language:"isiXhosa"});
 
             assert.equal(4, await salute.greetCounter());
         });
@@ -98,25 +95,25 @@ describe("The greet_app", function () {
     describe("The name greeted function", function () {
         it("should be able to return all the greetEnteredName names as an object", async function () {
             let salute = greetPeeps(pool);
+            await salute.greetEnteredName({name:"Wendy", language:"isiXhosa"});
+            await salute.greetEnteredName({name:"Zolie", language:"isiXhosa"});
+            await salute.greetEnteredName({name:"Joubert", language:"isiXhosa"});
+            await salute.greetEnteredName({name:"Ish", language:"isiXhosa"});
 
-            await salute.greetEnteredName('Sibo');
-            await salute.greetEnteredName('Sinazo');
-            await salute.greetEnteredName('Mzi');
-            await salute.greetEnteredName('Bonolo');
-            assert.deepEqual([{ name: 'Sibo' }, { name: 'Sinazo' }, { name: 'Mzi' }, { name: 'Bonolo' }], await salute.getName());
+            assert.deepEqual([{ greeted_names: 'Wendy' }, { greeted_names: 'Zolie' }, { greeted_names: 'Joubert' }, { greeted_names: 'Ish' }], await salute.getName());
 
         });
     });
 
-    describe("The namegreetEnteredName function", function () {
-        it("should be able to add a name and conter in a sentence", async function () {
-            let salute = greetPeeps(pool);
+    // describe("The namegreetEnteredName function", function () {
+    //     it("should be able to add a name and conter in a sentence", async function () {
+    //         let salute = greetPeeps(pool);
 
-            await salute.greetEnteredName('Amanda');
+    //         await salute.greetEnteredName('Amanda');
             
-            assert.equal('Hello, ' + 'Amanda' + ' has been greeted ' + 1 + ' times!', await salute.greetedManyTimes('Amanda'));
-        });
-    });
+    //         assert.equal(1, await salute.greetedManyTimes());
+    //     });
+    // });
     after(function () {
         pool.end();
     });
