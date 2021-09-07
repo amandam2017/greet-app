@@ -24,11 +24,11 @@ describe("The greet_app", function () {
     });
 
     describe("The greetEnteredName function", function () {
-        it('should be able to set and get the entered name Amelia' , async function(){
+        it('should be able to set and get the entered name Maarman' , async function(){
 
             let salute = greetPeeps(pool);
     
-            await salute.greetEnteredName({name:"Maarman", language:"isiXhosa"})
+            await salute.greetEnteredName({name:"Maarman"})
             assert.deepEqual([{greeted_names:"Maarman"}], await salute.getName());
             
         });

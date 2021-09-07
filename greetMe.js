@@ -44,7 +44,7 @@
     async function getName() {
         try {
             var storedNames = await pool.query('SELECT greeted_names FROM greetUsers')
-            console.log(storedNames.rows)
+            // console.log(storedNames.rows)
             return storedNames.rows;
         } catch (error) {
             console.log(error)
