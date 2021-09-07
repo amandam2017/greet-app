@@ -6,7 +6,7 @@ const pg = require("pg");
 const Pool = pg.Pool;
 
 // which db connection to use
-const connectionString = process.env.DATABASE_URL || 'postgresql://codex:pg123@localhost:5432/greetings_testing';
+const connectionString = process.env.DATABASE_URL || 'postgresql://codex:pg123@localhost:5432/greetings_app';
 
 const pool = new Pool({
     //connection to the address
