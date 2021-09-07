@@ -29,7 +29,7 @@ describe("The greet_app", function () {
             let salute = greetPeeps(pool);
     
             await salute.greetEnteredName({name:"Maarman", language:"isiXhosa"})
-            assert.deepEqual([{greeted_names:"Maarman"}], await salute.getName());
+            assert.deepEqual([{greeted_names:"Amanda"}], await salute.getName());
             
         });
 
