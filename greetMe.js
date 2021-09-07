@@ -95,12 +95,6 @@
 }
 
 
-// create table users(
-// 	id serial not null primary key,
-// 	greeted_names text not null,
-//     counter_names int
-// );
-
 //whoiam --to check the super user
 //keep password -- make sure it corresponds with the super user
 //Learnt to be flexible --- to not get too attached to the code
