@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "12"
+  - "v12.18.3"
 
 env:
   - DATABASE_URL=postgresql://postgres@localhost:5432/greetings_testing
