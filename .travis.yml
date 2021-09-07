@@ -4,14 +4,14 @@ node_js:
   - 12
 
 env:
-  - DATABASE_URL=postgresql://postgres@localhost:5432/greetings_tests-db
+  - DATABASE_URL=postgresql://postgres@localhost:5432/greetings_testing
 
 node_js:  
   - "9.4"
 
 before_script:
-  - psql -c 'create database  greetings_tests-db' -U postgres
-  - psql -U postgres -d greetings_tests-db -a -f greetings_app.sql
+  - psql -c 'create database  greetings_tests' -U postgres
+  - psql -U postgres -d greetings_testing -a -f greetings_app.sql
 
 services:
   - postgresql  
