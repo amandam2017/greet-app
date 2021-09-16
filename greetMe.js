@@ -2,24 +2,35 @@
  
  module.exports = function greet(pool) {
 
+    async function dbqueries(name){
+        // let strName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+
+        if(name){
+            var checkName = await pool.query('SELECT greeted_names FROM greetUsers WHERE greeted_names = $1', [name]);
+            if (checkName.rowCount === 0) {
+                const INSERT_QUERY = await pool.query('INSERT INTO greetUsers (greeted_names, counter_names) values ($1, 1)', [name]);
+            }
+            
+            else {
+                var UPDATE_QUERY = await pool.query('UPDATE greetUsers SET counter_names = counter_names+1 WHERE greeted_names = $1', [name]);
+            }
+        }
+        
+    }
+
     async function greetEnteredName(enterYourName) {
         
         try {
-            let name = enterYourName.name
-            let language = enterYourName.language
+
+            name = enterYourName.name
+            language = enterYourName.language
+
+            await dbqueries(name)
+
     
-            let strName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+            let strName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
             if (pattern.test(strName)) {
-
-                var checkName = await pool.query('SELECT greeted_names FROM greetUsers WHERE greeted_names = $1', [strName]);
-                if (checkName.rowCount === 0) {
-                    const INSERT_QUERY = await pool.query('INSERT INTO greetUsers (greeted_names, counter_names) values ($1, 1)', [strName]);
-                }
-                
-                else {
-                    var UPDATE_QUERY = await pool.query('UPDATE greetUsers SET counter_names = counter_names+1 WHERE greeted_names = $1', [strName]);
-                }
    
                 if (language === 'isiXhosa' && strName != '') {
                     return "Molo, " + strName;
@@ -90,7 +101,8 @@
         greetCounter,
         getName,
         greetedManyTimes,
-        resert
+        resert,
+        dbqueries
     }
 }
 

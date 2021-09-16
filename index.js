@@ -4,8 +4,10 @@ const flash = require('express-flash');
 const session = require('express-session');
 const express = require('express');
 const exphbs = require('express-handlebars');
-const bodyParser = require('body-parser');
+const bodyparser = require('body-parser');
 const greet = require('./greetMe');
+//require a routes file
+const Routes = require('./routesFile');
 
 const pg = require("pg");
 const Pool = pg.Pool;
@@ -21,6 +23,7 @@ if (process.env.DATABASE_URL && !local) {
 // which db connection to connect to
 const connectionString = process.env.DATABASE_URL || 'postgresql://codex:pg123@localhost:5432/greetings_app';
 
+
 const pool = new Pool({
   connectionString,
   ssl: {
@@ -28,16 +31,17 @@ const pool = new Pool({
   }
 });
 
-let salutedName = ''
-let nameList = [];
-let counter = 0;
-let errors = ''
+    // let salutedName = ''
+    // let nameList = [];
+    let errors = ''
 
 
 //instantiate app
 const app = express();
 //create instance for greet factory
 const greetPeeps = greet(pool);
+//create an instance for the routees
+const routesFileInstance = Routes(greetPeeps);
 
 // initialise session middleware - flash-express depends on it
 app.use(session({
@@ -56,106 +60,26 @@ app.set('view engine', 'handlebars');
 app.use(express.static('public'));
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyparser.urlencoded({extended: true}));
+
 // parse application/json
-app.use(bodyParser.json())
+// app.use(bodyParser.json());
+app.use(bodyparser.json()); 
+// app.use(bodyparser.json()); //utilizes the body-parser package
 
 //default route
-app.get("/", async function (req, res) {
-  try {
-    counter = await greetPeeps.greetCounter();
+app.get("/", routesFileInstance.home);
 
-    res.render("index", {
-      salutedthisname: salutedName,
-      counter,
-      errors,
-      // nameList
-    });
-
-  } catch (error) {
-    console.log(error);
-  }
-
-});
-var pattern = /^[A-Za-z]+$/;
-
-app.post('/greet', async function (req, res) {
-  console.log(await greetPeeps.greetEnteredName({name: req.body.userName,
-    language: req.body.userLanguage}))
-  try {
-    var name = req.body.userName
-    var language = req.body.userLanguage
-
-    if(pattern.test(name)){
-      if (name && language) {
-        salutedName = await greetPeeps.greetEnteredName({
-          name: req.body.userName,
-          language: req.body.userLanguage,
-        })
-  
-        counter = await greetPeeps.greetCounter();
-  
-      }
-     
-    else if (!name && !language) {
-      req.flash('error', "*Please enter name and select a language*")
-    } else if (!name) {
-      req.flash('error', "*Please enter name*")
-    } else if (!language) {
-      req.flash('error', "*Please select a language*")
-    }
-  }
-  else{
-    req.flash('error', "*letters only*")
-
-  }
-
-    res.redirect('/');
-
-  } catch (error) {
-    console.log(error);
-  }
-});
+app.post('/greet', routesFileInstance.greeting);
 
 
 // info to be retrieved on database
-app.get('/greeted', async function (req, res) {
-  try {
-    // console.log(await greetPeeps.getName())
-    res.render('greetedNames', {
-      nameList: await greetPeeps.getName()
-    })
-  } catch (error) {
-    console.log(error);
-  }
-})
+app.get('/greeted', routesFileInstance.greetedlist)
 
+app.get('/counter/:greeted_names', routesFileInstance.greetCounterList)
 
-app.get('/counter/:greeted_names', async function (req, res) {
-  try {
-    let names = req.params.greeted_names;
-    let counter_names = await greetPeeps.greetedManyTimes(names)
-    res.render('counter', {
-      names,
-      counter_names
-    })
-
-  } catch (error) {
-    console.log(error);
-  }
-
-})
-
-app.get('/reset', async function (req, res) {
-  try {
-
-    await greetPeeps.resert()
-
-    res.redirect('/')
-  } catch (error) {
-    console.log(error);
-  }
-})
+app.get('/reset', routesFileInstance.clearDataBase)
 
 
 let PORT = process.env.PORT || 3015;

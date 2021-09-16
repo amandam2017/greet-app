@@ -3,13 +3,15 @@ body{
 }
 
 .form_container{
-  border: 2px solid #152069;
-  padding: 20px;
+    padding: 20px;
+    width: 70%;
+    margin: 0 auto;
 }
 
 .form{
- border: 1px solid #152069; 
- color: #152069;
+  border: 5px solid #152069;
+  color: #152069;
+  border-radius: 15px;
 }
 
 .form .enteredName{
