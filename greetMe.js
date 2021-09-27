@@ -3,16 +3,16 @@
  module.exports = function greet(pool) {
 
     async function dbqueries(name){
-        // let strName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+        let strName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
         if(name){
-            var checkName = await pool.query('SELECT greeted_names FROM greetUsers WHERE greeted_names = $1', [name]);
+            var checkName = await pool.query('SELECT greeted_names FROM greetUsers WHERE greeted_names = $1', [strName]);
             if (checkName.rowCount === 0) {
-                const INSERT_QUERY = await pool.query('INSERT INTO greetUsers (greeted_names, counter_names) values ($1, 1)', [name]);
+                const INSERT_QUERY = await pool.query('INSERT INTO greetUsers (greeted_names, counter_names) values ($1, 1)', [strName]);
             }
             
             else {
-                var UPDATE_QUERY = await pool.query('UPDATE greetUsers SET counter_names = counter_names+1 WHERE greeted_names = $1', [name]);
+                var UPDATE_QUERY = await pool.query('UPDATE greetUsers SET counter_names = counter_names+1 WHERE greeted_names = $1', [strName]);
             }
         }
         
