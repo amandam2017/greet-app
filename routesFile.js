@@ -112,7 +112,7 @@
                 req.flash('error', "*Please select a language*")
               }
             else{
-              req.flash('error', "*letters only*")
+              req.flash('error', "*Letters only*")
           
             }
                       
