@@ -44,6 +44,8 @@
                     return "Hallo, " + strName;
                 }
     
+            }else{
+                return "Please enter letters Only [a-z]"
             }
             
         } catch (error) {

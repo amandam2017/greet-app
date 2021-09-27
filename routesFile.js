@@ -4,13 +4,8 @@
 
     let salutedName = ''
     let nameList = [];
-    // let errors = ''
 
-
-    async function home(req, res) {
-
-        // console.log(await greetPeeps.greetCounter())
-      
+    async function home(req, res) {      
         try {
         let counter =  await greetPeeps.greetCounter();
       
@@ -18,8 +13,6 @@
           res.render("index", {
             salutedthisname: salutedName,
             counter,
-            // errors,
-            // nameList
           });
       
       
@@ -38,29 +31,28 @@
 
           var name = req.body.userName
           var language = req.body.userLanguage
-      
-          if(pattern.test(name)){
-            if (name && language) {
-              salutedName = await greetPeeps.greetEnteredName({
-                name: req.body.userName,
-                language: req.body.userLanguage,
-              });
-            }
            
-            else if (!name && !language) {
+            if (!name && !language) {
                 req.flash('error', "*Please enter name and select a language*")
+                salutedName = "";
               } 
               else if (!name) {
                 req.flash('error', "*Please enter name*")
+                salutedName = "";
+
               } 
               else if (!language) {
                 req.flash('error', "*Please select a language*")
+                salutedName = "";
+
               }
-            }
-            // else{
-            //   req.flash('error', "*letters only*")
-          
-            // }  
+              else{
+                  salutedName = await greetPeeps.greetEnteredName({
+                      name: req.body.userName,
+                      language: req.body.userLanguage,
+                  });
+              }
+  
           res.redirect('/');
       
         } catch (error) {
@@ -123,10 +115,7 @@
               req.flash('error', "*letters only*")
           
             }
-          
-            // counter = await greetPeeps.dbqueries(counter);
-          
-          
+                      
               res.redirect('/');
           
             } catch (error) {
